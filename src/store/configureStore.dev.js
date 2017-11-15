@@ -1,8 +1,20 @@
-import { createStore, compose} from 'redux'
+import { createStore, applyMiddleware, compose} from 'redux'
+import createHistory from 'history/createBrowserHistory'
+import { routerMiddleware } from 'react-router-redux'
 import rootReducer from '../reducers'
 import DevTools from '../containers/DevTools'
 
+// Create a history of your choosing (we're using a browser history in this case)
+export const history = createHistory({
+  basename: process.env.PUBLIC_URL
+})
+
+// Build the middleware for intercepting and dispatching navigation actions
+const middleware = routerMiddleware(history)
+
 const enhancer = compose(
+  // Middleware you want to use in development:
+  applyMiddleware(middleware),
   // Required! Enable Redux DevTools with the monitors you chose
   DevTools.instrument()
 );
